@@ -1,0 +1,16 @@
+#wrapper
+{
+	width: 80%;
+	height: 400px;
+	margin: 0 auto;
+}
+
+
+
+h1
+{
+	font-family: 'Lobster', cursive;
+	font-size: 300%;
+	text-align: center;	
+	margin-top: 2%;
+}
