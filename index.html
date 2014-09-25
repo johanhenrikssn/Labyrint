@@ -12,13 +12,10 @@
 		
 			<header>
 				<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
-				<h1>Labyrint</h1>
+				<h1 id="title">Labyrint</h1>
 			</header>
 
-			<audio autoplay="autoplay" controls="controls" id="audio">
- 				
-  				
-			</audio>
+			
 
 			<script>
 
@@ -30,15 +27,18 @@
 	                               null;
 
 
-				var createSrc = window.URL ? window.URL.createObjectURL : function(stream) {return stream;};
-
+				var context = new (window.AudioContext || window.webkitAudioContext)();
+				
+				var analyser = context.createAnalyser();
+				var bufferLength = analyser.frequencyBinCount; // half the FFT value
+   				var dataArray = new Uint8Array(bufferLength); // create an array to store the data
+				
 				navigator.getUserMedia({audio: true}, function(stream) {
 					
-					
-	        		// Stream the data
-	        		audio.src = createSrc(stream);
+					var source = context.createMediaStreamSource(stream);
+					source.connect(analyser);
 
-					audio.play();
+					update();
 
 				}, errorCallback);
 
@@ -47,7 +47,17 @@
 	    			alert('something went wrong');
 				}
 
-    			
+
+				function update() {
+
+					// Schedule the next update
+					requestAnimationFrame(update);
+
+					analyser.getByteTimeDomainData(dataArray);
+					
+					title.style.fontSize = dataArray[33] + 'px';
+					
+				};
 
 			</script>
 
