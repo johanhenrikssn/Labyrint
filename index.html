@@ -4,14 +4,13 @@
 		<meta charset="utf-8" />
 		<title> Labyrint</title>
 		<link rel="stylesheet" type="text/css" href="style.css">
+		<script src="js/two.min.js"></script>
 	</head>
-
-	
-	
 	<body>
 		
 			<header>
 				<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+
 				<h1>Labyrint</h1>
 			</header>
 
@@ -20,7 +19,27 @@
   				
 			</audio>
 
+			<script type="text/javascript">
+				// Make an instance of two and place it on the page.
+				var params = { width: 285, height: 200 };
+				var two = new Two(params).appendTo(document.body);
+
+				// two has convenience methods to create shapes.
+				var circle = two.makeCircle(72, 100, 50);
+
+				// The object returned has many stylable properties:
+				circle.fill = '#FF8000';
+				circle.stroke = 'orangered'; // Accepts all valid css color
+				circle.linewidth = 5;
+
+				// Don't forget to tell two to render everything
+				// to the screen
+				two.update();
+			</script>
+
 			<script>
+
+
 
 				window.navigator = window.navigator || {};
 
@@ -33,8 +52,7 @@
 				var createSrc = window.URL ? window.URL.createObjectURL : function(stream) {return stream;};
 
 				navigator.getUserMedia({audio: true}, function(stream) {
-					
-					
+
 	        		// Stream the data
 	        		audio.src = createSrc(stream);
 
