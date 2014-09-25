@@ -6,7 +6,7 @@
 		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 
-	<script src="two.js"></script>
+	
 	
 	<body>
 		
@@ -15,7 +15,41 @@
 				<h1>Labyrint</h1>
 			</header>
 
-			
+			<audio autoplay="autoplay" controls="controls" id="audio">
+ 				
+  				
+			</audio>
+
+			<script>
+
+				window.navigator = window.navigator || {};
+
+	     		navigator.getUserMedia = navigator.getUserMedia       ||
+	                               navigator.webkitGetUserMedia ||
+	                               navigator.mozGetUserMedia    ||
+	                               null;
+
+
+				var createSrc = window.URL ? window.URL.createObjectURL : function(stream) {return stream;};
+
+				navigator.getUserMedia({audio: true}, function(stream) {
+					
+					
+	        		// Stream the data
+	        		audio.src = createSrc(stream);
+
+					audio.play();
+
+				}, errorCallback);
+
+				function errorCallback() {
+	    			
+	    			alert('something went wrong');
+				}
+
+    			
+
+			</script>
 
 	</body>
 </html>
