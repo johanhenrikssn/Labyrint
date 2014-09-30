@@ -11,32 +11,10 @@
 			<header>
 				<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
 
-				<h1 id="title">Labyrint</h1>
-			</header>
-
-			
-
-			<script type="text/javascript">
-				// Make an instance of two and place it on the page.
-				var params = { width: 285, height: 200 };
-				var two = new Two(params).appendTo(document.body);
-
-				// two has convenience methods to create shapes.
-				var circle = two.makeCircle(72, 100, 50);
-
-				// The object returned has many stylable properties:
-				circle.fill = '#FF8000';
-				circle.stroke = 'orangered'; // Accepts all valid css color
-				circle.linewidth = 5;
-
-				// Don't forget to tell two to render everything
-				// to the screen
-				two.update();
-			</script>
+		
+			</header>			
 
 			<script>
-
-
 
 				window.navigator = window.navigator || {};
 
@@ -61,6 +39,52 @@
 
 				}, errorCallback);
 
+
+				//..........All Graphics.......................
+				// Make an instance of two and place it on the page
+				var params = { width: 1000, height: 200 };
+				var two = new Two(params).appendTo(document.body);
+
+				var circle = two.makeCircle(72, 100, 50);
+
+				circle.fill = 'lightblue';
+				circle.stroke = 'blue';
+				circle.linewidth = 1;
+				var xstartPosition = 500;
+				var ystartPosition = 50;
+				circle.translation.set(xstartPosition,ystartPosition);
+
+				var delta = new Two.Vector(0, 0);
+				
+				var temp = 0;
+				var temp2 = 0;
+
+			
+				// animationloop
+				two.bind('update', function(frameCount) {
+
+				//DEN STARKASTE FREKVENSEN SKA IN DÄR DDET STÅR DATAARRAY[32]
+				temp2 = dataArray[32]/2; 
+				
+				if(temp == temp2)
+					delta.x = 0;
+				else if(temp < temp2)
+					delta.x = -1;
+				else if(temp > temp2)
+					delta.x = 1;
+
+				temp = dataArray[32]/2; 
+			
+				circle.translation.addSelf(delta);
+
+				}).play();
+
+
+				// render everything to the screen
+				two.update();
+				//..............................................
+
+
 				function errorCallback() {
 	    			
 	    			alert('something went wrong');
@@ -72,9 +96,8 @@
 					// Schedule the next update
 					requestAnimationFrame(update);
 
-					analyser.getByteTimeDomainData(dataArray);
-					
-					title.style.fontSize = dataArray[33] + 'px';
+					analyser.getByteFrequencyData(dataArray);
+				
 					
 				};
 
