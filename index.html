@@ -4,6 +4,7 @@
 		<meta charset="utf-8" />
 		<title> Labyrint</title>
 		<link rel="stylesheet" type="text/css" href="style.css">
+		<script src="visualizer.js" type="text/javascript"></script>
 	</head>
 
 	
@@ -14,6 +15,10 @@
 				<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
 				<h1 id="title">Labyrint</h1>
 			</header>
+
+			<div class="wrapper">
+				<canvas class="visualizer"></canvas>
+			</div>
 
 			
 
@@ -27,37 +32,51 @@
 	                               null;
 
 
+	            //Initierar ljudkontexten tillsammans med egenskaperna för analysen
 				var context = new (window.AudioContext || window.webkitAudioContext)();
-				
 				var analyser = context.createAnalyser();
+				analyser.fftSize = 2048;
 				var bufferLength = analyser.frequencyBinCount; // half the FFT value
    				var dataArray = new Uint8Array(bufferLength); // create an array to store the data
 				
+				//Tar in mikrofonljud, samt ritar om intagandet går bra.
 				navigator.getUserMedia({audio: true}, function(stream) {
 					
 					var source = context.createMediaStreamSource(stream);
 					source.connect(analyser);
 
-					update();
+					draw();
 
 				}, errorCallback);
 
+				//Om det inte går att få mikrofonljudet
 				function errorCallback() {
 	    			
 	    			alert('something went wrong');
 				}
 
 
-				function update() {
+				//Initerar canvas-egenskaper
+				var canvas = document.querySelector('.visualizer');
+				var canvasCtx = canvas.getContext("2d");
+				var intendedWidth = document.querySelector('.wrapper').clientWidth;
+				canvas.setAttribute('width',intendedWidth);
+				WIDTH = canvas.width;
+				HEIGHT = canvas.height;
+				canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
-					// Schedule the next update
-					requestAnimationFrame(update);
+				function draw() {
 
-					analyser.getByteTimeDomainData(dataArray);
+					requestAnimationFrame(draw);
+
+					analyser.getByteFrequencyData(dataArray);
+
+					setUpVisualizer();
 					
-					title.style.fontSize = dataArray[33] + 'px';
-					
-				};
+
+				}
+
+			
 
 			</script>
 

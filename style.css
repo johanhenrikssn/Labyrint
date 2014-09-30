@@ -1,7 +1,7 @@
-#wrapper
+.wrapper
 {
-	width: 80%;
-	height: 400px;
+	width: 100%;
+	
 	margin: 0 auto;
 }
 
@@ -13,4 +13,8 @@ h1
 	font-size: 300%;
 	text-align: center;	
 	margin-top: 2%;
+}
+
+.visualizer{
+
 }
