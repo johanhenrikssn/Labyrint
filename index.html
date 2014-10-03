@@ -17,8 +17,9 @@
 
 
 				<div class="wrapper">
-					<h1>Labyrint</h1>
-					<div class="game"></div>
+					<div class="game">
+						<h1>Labyrint</h1>
+					</div>	
 					<canvas class="visualizer"></canvas>
 				</div>
 
@@ -40,13 +41,16 @@
 				var analyser = context.createAnalyser();
 				analyser.fftSize = 2048;
 				var bufferLength = analyser.frequencyBinCount; // half the FFT value
-   				var dataArray = new Uint8Array(bufferLength); // create an array to store the data
+				bufferLength = bufferLength/15;
+   				var freqDomain = new Uint8Array(bufferLength); // create an array to store the data
 				
 				//Tar in mikrofonljud, samt ritar om intagandet går bra.
 				navigator.getUserMedia({audio: true}, function(stream) {
 					
 					var source = context.createMediaStreamSource(stream);
+					
 					source.connect(analyser);
+					
 
 					draw();
 
@@ -69,20 +73,22 @@
 
 				//..........All Graphics.......................
 				// Make an instance of two and place it on the page
-				var box = document.querySelector('.game');
+				var gamebox = document.querySelector('.game');
+				var gamebox_height = document.querySelector('.game').clientHeight;
 
 
-				var params = { width: intendedWidth, height: 200 };
-				var two = new Two(params).appendTo(box);
+				var params = { width: intendedWidth, height: gamebox_height };
+				var two = new Two(params).appendTo(gamebox);
 
 
-				var circle = two.makeCircle(72, 100, 50);
+				var circle = two.makeCircle(72, 100, 20);
 
-				circle.fill = 'lightblue';
-				circle.stroke = 'blue';
+				circle.fill = 'red';
+				circle.stroke = 'yellow';
 				circle.linewidth = 1;
-				var xstartPosition = 500;
-				var ystartPosition = 50;
+				
+				var xstartPosition = intendedWidth/2;
+				var ystartPosition = gamebox_height - gamebox_height*0.2;
 				circle.translation.set(xstartPosition,ystartPosition);
 
 				var delta = new Two.Vector(0, 0);
@@ -95,7 +101,7 @@
 				two.bind('update', function(frameCount) {
 
 					//DEN STARKASTE FREKVENSEN SKA IN DÄR DDET STÅR DATAARRAY[32]
-					temp2 = dataArray[32]/2; 
+					temp2 = freqDomain[100]/2; 
 					
 					if(temp == temp2)
 						delta.x = 0;
@@ -104,7 +110,7 @@
 					else if(temp > temp2)
 						delta.x = 1;
 
-					temp = dataArray[32]/2; 
+					temp = freqDomain	[32]/2; 
 				
 					circle.translation.addSelf(delta);
 
@@ -122,7 +128,9 @@
 
 					requestAnimationFrame(draw);
 
-					analyser.getByteFrequencyData(dataArray);
+					analyser.getByteFrequencyData(freqDomain);
+
+
 
 					setUpVisualizer();
 
