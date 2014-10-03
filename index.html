@@ -7,7 +7,6 @@
 
 		<script src="visualizer.js" type="text/javascript"></script>
 		<script src="js/two.min.js"></script>
-		<script src="js/tween.min.js"></script>
 
 	</head>
 	
@@ -99,7 +98,7 @@
 				// animationloop
 				two.bind('update', function(frameCount) {
 
-					maxValue = Math.max.apply(Math, dataArray);
+					maxValue = Math.max.apply(Math, dataArray/2);
 					
 					for(i = 0; i < dataArray.length; i++)
 					{
@@ -116,7 +115,8 @@
 					else if(index1 > index2)
 						delta.x = 1;
 
-					index1 = index2; 
+					if(frameCount%10 == 0)
+						index1 = index2; 
 
 					
 					circle.translation.addSelf(delta);
