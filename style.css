@@ -5,8 +5,6 @@
 	margin: 0 auto;
 }
 
-
-
 h1
 {
 	font-family: 'Lobster', cursive;
@@ -24,3 +22,7 @@ h1
 	height: 80%;
 }
 
+
+canvas {
+	background-color: #111;
+}
