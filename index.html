@@ -6,7 +6,6 @@
 
 		<script src="visualizer.js" type="text/javascript"></script>
 		<script src="js/two.min.js"></script>
-		<script src="js/tween.min.js"></script>
 		<script src="js/pitch.js"></script>
 	</head>
 	
@@ -97,15 +96,15 @@
 				circle.stroke = 'yellow';
 				circle.linewidth = 1;
 				
-				var xstartPosition = intendedWidth/2;
-				var ystartPosition = gamebox_height - gamebox_height*0.2;
-				circle.translation.set(xstartPosition,ystartPosition);
+				var xPosition = intendedWidth/2;
+				var yPosition = gamebox_height - gamebox_height*0.2;
+				circle.translation.set(xPosition,yPosition);
 
 				var delta = new Two.Vector(0, 0);
 				
 
-				var index1 = 0;
-				var index2 = 0;
+				var index = [0, 0, 0, 0, 0, 0, 0, 0];
+				var j = 1;
 
 				var maxValue;
 
@@ -114,25 +113,46 @@
 				// animationloop
 				two.bind('update', function(frameCount) {
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 03f86181f2548b4a80f0bfc06f80224244e0f389
 					maxValue = Math.max.apply(Math, freqDomain);
 					
 					for(i = 0; i < freqDomain.length; i++)
 					{
 						if(freqDomain[i] == maxValue)
 						{
-							index2 = i;
+							index[j] = i;
+							j++;
+							if(j == 8)
+								j = 0;
+
 							break;
+
 						}
 					}
+					
+					//stops the ball from rollin' out of the window
+					if(xPosition < (intendedWidth-20) && xPosition > 20 && index[1] != 0&& AllTheSame(index)){
+						//decides the steering of the ball
+						if(index[1] < 15){
+							delta.x = -1;
+							xPosition--;
+						}
+						else if(index[1] > 15){
+							delta.x = +1;
+							xPosition++;
+						}
+					}
+					else
+						delta.x = 0;
 
-					//det här under ska ändras
-					if(index1 < index2)
-						delta.x = -1;
-					else if(index1 > index2)
-						delta.x = 1;
-				
-					index1 = index2; 
+
+
+
+
+					console.log(index);
 
 					circle.translation.addSelf(delta);
 
@@ -154,6 +174,13 @@
 
 					setUpVisualizer();
 
+				}
+
+				function AllTheSame(array) {
+    				var first = array[0];
+   					return array.every(function(element) {
+        				return element === first;
+    				});
 				}
 
 			
