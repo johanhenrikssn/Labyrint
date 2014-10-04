@@ -10,182 +10,175 @@
 	</head>
 	
 	<body>
-			<header>
-				<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+		<header>
+			<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
 
 
-				<div class="wrapper">
-					<div class="game">
-						<h1>Labyrint</h1>
-						<span id="pitch">--</span>Hz</div>
+			<div class="wrapper">
+				<div class="game">
+					<h1>Labyrint</h1>
+					<span id="pitch">--</span>Hz</div>
 
-					</div>	
-					<canvas class="visualizer"></canvas>
-				</div>
+				</div>	
+				<canvas class="visualizer"></canvas>
+			</div>
 
-			</header>			
-
-
-			<script>
-
-				window.navigator = window.navigator || {};
-
-	     		navigator.getUserMedia = navigator.getUserMedia       ||
-	                               navigator.webkitGetUserMedia ||
-	                               navigator.mozGetUserMedia    ||
-	                               null;
+		</header>			
 
 
-	            //Initierar ljudkontexten tillsammans med egenskaperna för analysen
-				var context = new (window.AudioContext || window.webkitAudioContext)();
-				var analyser = context.createAnalyser();
-				analyser.fftSize = 2048;
-				var bufferLength = analyser.frequencyBinCount; // half the FFT value
-				bufferLength = bufferLength/15;
-   				var freqDomain = new Uint8Array(bufferLength); // create an array to store the data
-				
-				//Tar in mikrofonljud, samt ritar om intagandet går bra.
-				navigator.getUserMedia({audio: true}, function(stream) {
-					
-					var source = context.createMediaStreamSource(stream);
-					
-					source.connect(analyser);
-					
-					//Updatera nuvarande pitch
-					updatePitch();
+		<script>
 
-					draw();
+			window.navigator = window.navigator || {};
 
-				}, errorCallback);
-
-				//Om det inte går att få mikrofonljudet
-				function errorCallback() {
-	    			
-	    			alert('something went wrong');
-				}
-
-				//Räknar ut pitch och uppdaterar siffran i dokumentet
-				//TODO: Sammanfoga med existerande variabler
-				var rafID = null;
-				var buflen = 2048;
-				var buf = new Uint8Array( buflen );
-				var pitchElem = document.getElementById( "pitch" );
-
-				//Initerar canvas-egenskaper
-				var canvas = document.querySelector('.visualizer');
-				var canvasCtx = canvas.getContext("2d");
-				var intendedWidth = document.querySelector('.wrapper').clientWidth;
-				canvas.setAttribute('width',intendedWidth);
-				WIDTH = canvas.width;
-				HEIGHT = canvas.height;
-				canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-
-				//..........All Graphics.......................
-				// Make an instance of two and place it on the page
-				var gamebox = document.querySelector('.game');
-				var gamebox_height = document.querySelector('.game').clientHeight;
+     		navigator.getUserMedia = navigator.getUserMedia       ||
+                               navigator.webkitGetUserMedia ||
+                               navigator.mozGetUserMedia    ||
+                               null;
 
 
-				var params = { width: intendedWidth, height: gamebox_height };
-				var two = new Two(params).appendTo(gamebox);
-
-
-				var circle = two.makeCircle(72, 100, 20);
-
-				circle.fill = 'red';
-				circle.stroke = 'yellow';
-				circle.linewidth = 1;
-				
-				var xPosition = intendedWidth/2;
-				var yPosition = gamebox_height - gamebox_height*0.2;
-				circle.translation.set(xPosition,yPosition);
-
-				var delta = new Two.Vector(0, 0);
-				
-
-				var index = [0, 0, 0, 0, 0, 0, 0, 0];
-				var j = 1;
-
-				var maxValue;
-
-
+            //Initierar ljudkontexten tillsammans med egenskaperna för analysen
+			var context = new (window.AudioContext || window.webkitAudioContext)();
+			var analyser = context.createAnalyser();
+			analyser.fftSize = 2048;
+			var bufferLength = analyser.frequencyBinCount; // half the FFT value
+			bufferLength = bufferLength/15;
+				var freqDomain = new Uint8Array(bufferLength); // create an array to store the data
 			
-				// animationloop
-				two.bind('update', function(frameCount) {
+			//Tar in mikrofonljud, samt ritar om intagandet går bra.
+			navigator.getUserMedia({audio: true}, function(stream) {
+				
+				var source = context.createMediaStreamSource(stream);
+				
+				source.connect(analyser);
+				
+				//Updatera nuvarande pitch
+				updatePitch();
 
-<<<<<<< HEAD
+				draw();
 
-=======
->>>>>>> 03f86181f2548b4a80f0bfc06f80224244e0f389
-					maxValue = Math.max.apply(Math, freqDomain);
-					
-					for(i = 0; i < freqDomain.length; i++)
+			}, errorCallback);
+
+			//Om det inte går att få mikrofonljudet
+			function errorCallback() {
+    			
+    			alert('something went wrong');
+			}
+
+			//Räknar ut pitch och uppdaterar siffran i dokumentet
+			//TODO: Sammanfoga med existerande variabler
+			var rafID = null;
+			var buflen = 2048;
+			var buf = new Uint8Array( buflen );
+			var pitchElem = document.getElementById( "pitch" );
+
+			//Initerar canvas-egenskaper
+			var canvas = document.querySelector('.visualizer');
+			var canvasCtx = canvas.getContext("2d");
+			var intendedWidth = document.querySelector('.wrapper').clientWidth;
+			canvas.setAttribute('width',intendedWidth);
+			WIDTH = canvas.width;
+			HEIGHT = canvas.height;
+			canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+
+			//..........All Graphics.......................
+			// Make an instance of two and place it on the page
+			var gamebox = document.querySelector('.game');
+			var gamebox_height = document.querySelector('.game').clientHeight;
+
+
+			var params = { width: intendedWidth, height: gamebox_height };
+			var two = new Two(params).appendTo(gamebox);
+
+
+			var circle = two.makeCircle(72, 100, 20);
+
+			circle.fill = 'red';
+			circle.stroke = 'yellow';
+			circle.linewidth = 1;
+			
+			var xPosition = intendedWidth/2;
+			var yPosition = gamebox_height - gamebox_height*0.2;
+			circle.translation.set(xPosition,yPosition);
+
+			var delta = new Two.Vector(0, 0);
+			
+
+			var index = [0, 0, 0, 0, 0, 0, 0, 0];
+			var j = 1;
+
+			var maxValue;
+
+
+		
+			// animationloop
+			two.bind('update', function(frameCount) {
+
+				maxValue = Math.max.apply(Math, freqDomain);
+				
+				for(i = 0; i < freqDomain.length; i++)
+				{
+					if(freqDomain[i] == maxValue)
 					{
-						if(freqDomain[i] == maxValue)
-						{
-							index[j] = i;
-							j++;
-							if(j == 8)
-								j = 0;
+						index[j] = i;
+						j++;
+						if(j == 8)
+							j = 0;
 
-							break;
+						break;
 
-						}
 					}
-					
-					//stops the ball from rollin' out of the window
-					if(xPosition < (intendedWidth-20) && xPosition > 20 && index[1] != 0&& AllTheSame(index)){
-						//decides the steering of the ball
-						if(index[1] < 15){
-							delta.x = -1;
-							xPosition--;
-						}
-						else if(index[1] > 15){
-							delta.x = +1;
-							xPosition++;
-						}
-					}
-					else
-						delta.x = 0;
-
-
-
-
-
-					console.log(index);
-
-					circle.translation.addSelf(delta);
-
-				}).play();
-
-
-				// render everything to the screen
-				two.update();
-				//..............................................
-
-
+				}
 				
-
-				function draw() {
-
-					requestAnimationFrame(draw);
-
-					analyser.getByteFrequencyData(freqDomain);
-
-					setUpVisualizer();
-
+				//stops the ball from rollin' out of the window
+				if(xPosition < (intendedWidth-20) && xPosition > 20 && index[1] != 0&& AllTheSame(index)){
+					//decides the steering of the ball
+					if(index[1] < 15){
+						delta.x = -1;
+						xPosition--;
+					}
+					else if(index[1] > 15){
+						delta.x = +1;
+						xPosition++;
+					}
 				}
+				else
+					delta.x = 0;
 
-				function AllTheSame(array) {
-    				var first = array[0];
-   					return array.every(function(element) {
-        				return element === first;
-    				});
-				}
+
+
+
+
+				console.log(index);
+
+				circle.translation.addSelf(delta);
+
+			}).play();
+
+
+			// render everything to the screen
+			two.update();
+			//..............................................
+
 
 			
 
-			</script>
+			function draw() {
 
+				requestAnimationFrame(draw);
+
+				analyser.getByteFrequencyData(freqDomain);
+
+				setUpVisualizer();
+
+			}
+
+			function AllTheSame(array) {
+				var first = array[0];
+					return array.every(function(element) {
+    				return element === first;
+				});
+			}
+
+		</script>
 	</body>
 </html>
