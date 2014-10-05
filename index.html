@@ -89,27 +89,48 @@
 			var params = { width: intendedWidth, height: gamebox_height };
 			var two = new Two(params).appendTo(gamebox);
 
+			//HÅLET
+			var hole_radius = 40;
+			var hole = two.makeCircle(72, 100, hole_radius);
+			hole.fill = 'grey';
+			hole.stroke = 'black';
+			hole.linewidth = 1;
+			var hole_xPosition = intendedWidth - intendedWidth*0.1;
+			var hole_yPosition = gamebox_height*0.08;
+			hole.translation.set(hole_xPosition,hole_yPosition);	
 
-			var circle = two.makeCircle(72, 100, 20);
 
-			circle.fill = 'red';
-			circle.stroke = 'yellow';
+			//BOLLEN
+			var circle_radius = 20;
+			var circle = two.makeCircle(72, 100, circle_radius);
+			circle.fill = 'yellow';
+			circle.stroke = 'red';
 			circle.linewidth = 1;
-			
 			var xPosition = intendedWidth/2;
-			var yPosition = gamebox_height - gamebox_height*0.2;
+			var yPosition = gamebox_height - gamebox_height*0.3;
 			circle.translation.set(xPosition,yPosition);
+
+				
 
 			var delta = new Two.Vector(0, 0);
 			
-
 			var index = [0, 0, 0, 0, 0, 0, 0, 0];
 			var j = 1;
 
 			var maxValue;
 
+			var circle_left = xPosition-circle_radius; 
+			var circle_right = xPosition+circle_radius;
+			var circle_top = yPosition+circle_radius;
+			var circle_bottom = yPosition-circle_radius;
 
-		
+
+			var hole_left = hole_xPosition-hole_radius; 
+			var hole_right = hole_xPosition+hole_radius;
+			var hole_top = hole_yPosition+hole_radius;
+			var hole_bottom = hole_yPosition-hole_radius;
+
+			
 			// animationloop
 			two.bind('update', function(frameCount) {
 
@@ -132,25 +153,30 @@
 				//stops the ball from rollin' out of the window
 				if(xPosition < (intendedWidth-20) && xPosition > 20 && index[1] != 0&& AllTheSame(index)){
 					//decides the steering of the ball
-					if(index[1] < 15){
+					if(index[1] < 12){
 						delta.x = -1;
 						xPosition--;
+						circle_left--;
+						circle_right--;
+
 					}
-					else if(index[1] > 15){
+					else if(index[1] > 12){
 						delta.x = +1;
 						xPosition++;
+						circle_left++;
+						circle_right++;
 					}
 				}
 				else
 					delta.x = 0;
 
-
-
-
-
-				console.log(index);
+				
+				if(circle_left > hole_left && circle_right < hole_right && circle_bottom> hole_bottom && circle_top < hole_top);
+					console.log("bärs");
 
 				circle.translation.addSelf(delta);
+
+
 
 			}).play();
 
@@ -158,9 +184,6 @@
 			// render everything to the screen
 			two.update();
 			//..............................................
-
-
-			
 
 			function draw() {
 
