@@ -262,9 +262,9 @@
 
 					circle.translation.addSelf(delta);
 				}
-				else{
+				else if(gameDirection == 1){
 					//Low tone if pitch is under 180
-					if(pitch < 220){
+					if(pitch >= 220 && pitch < 1500){
 						//Reset high tone in a row counter
 						highStreak=1;
 
@@ -288,7 +288,7 @@
 					}
 
 					//High tone if pitch is over 180 and not valid if over 1500
-					else if(pitch >= 220 && pitch < 1500){
+					else if(pitch < 220){
 						//Reset low tone in a row counter
 						lowStreak=1;
 
@@ -297,7 +297,7 @@
 						}
 
 						//stops the ball from rollin' out of the window
-						if ((xPosition + highStreak) < (canvas.height-20)){
+						if ((yPosition + highStreak) < (gamebox_height-20)){
 							delta.y = highStreak * 1; 
 							delta.x = 0;
 							yPosition = yPosition + highStreak * 1;
@@ -312,7 +312,7 @@
 					}
 
 					else
-						delta.x = 0;
+						delta.y = 0;
 
 					circle.translation.addSelf(delta);
 				}
@@ -321,6 +321,7 @@
 					//console.log("bärs");
 
 					console.log(yPosition);
+					console.log(canvas.height);
 
 
 			}).play();
