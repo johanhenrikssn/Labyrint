@@ -18,7 +18,7 @@
 		<div id="start">
 				<div id="play">
 					<a href = "javascript:void(0)" onclick = "document.getElementById('start').style.display='none';document.getElementById('play').style.display='none'"><h1>LABYRINT</h1></a>
-					<p>Styr kulan med hjälp av din röst och försöka få den att trilla ner i hålet.</p>
+					<p id="infotext">Styr kulan med hjälp av din röst och försöka få den att trilla ner i hålet.</p>
 					
 				</div>
 		</div>
@@ -231,7 +231,7 @@
 
 				if(gameDirection == 2){
 					//Low tone if pitch is under 180
-					if(pitch < 220){
+					if(pitch < 150){
 						//Reset high tone in a row counter
 						highStreak=1;
 
@@ -244,8 +244,8 @@
 							delta.x = lowStreak * -1;
 							delta.y = 0;
 							xPosition = xPosition + lowStreak * -1;
-							circle_left--;
-							circle_right--;
+							circle_left = circle_left + lowStreak*-1;
+							circle_right = circle_right + lowStreak*-1;
 						}
 						else{
 							delta.x = 0;
@@ -255,7 +255,7 @@
 					}
 
 					//High tone if pitch is over 180 and not valid if over 1500
-					else if(pitch >= 220 && pitch < 1500){
+					else if(pitch >= 150 && pitch < 1500){
 						//Reset low tone in a row counter
 						lowStreak=1;
 
@@ -268,8 +268,8 @@
 							delta.x = highStreak * 1; 
 							delta.y = 0;
 							xPosition = xPosition + highStreak * 1;
-							circle_top++;
-							circle_bottom++;
+							circle_left = circle_left + highStreak;
+							circle_right = circle_right + highStreak;
 						}
 						else{
 							delta.x = 0;
@@ -285,7 +285,7 @@
 				}
 				else if(gameDirection == 1){
 					//Low tone if pitch is under 180
-					if(pitch >= 220 && pitch < 1500){
+					if(pitch >= 150 && pitch < 1500){
 						//Reset high tone in a row counter
 						highStreak=1;
 
@@ -298,8 +298,8 @@
 							delta.y = lowStreak * -1;
 							delta.x = 0;
 							yPosition = yPosition + lowStreak * -1;
-							circle_top--;
-							circle_bottom--;
+							circle_top = circle_top + lowStreak*-1;
+							circle_bottom = circle_bottom + lowStreak*-1;
 						}
 						else{
 							delta.y = 0;
@@ -310,7 +310,7 @@
 
 
 					//High tone if pitch is over 180 and not valid if over 1500
-					else if(pitch < 220){
+					else if(pitch < 150){
 						//Reset low tone in a row counter
 						lowStreak=1;
 
@@ -323,8 +323,8 @@
 							delta.y = highStreak * 1; 
 							delta.x = 0;
 							yPosition = yPosition + highStreak * 1;
-							circle_left++;
-							circle_right++;
+							circle_top = circle_top + highStreak;
+							circle_bottom = circle_bottom + highStreak;
 						}
 						else{
 							delta.y = 0;
@@ -339,8 +339,12 @@
 					circle.translation.addSelf(delta);
 				}
 
-				if(circle_left > hole_left && circle_right < hole_right && circle_bottom> hole_bottom && circle_top < hole_top);
-					//console.log("bärs");
+				if(circle_left > hole_left && circle_right < hole_right && circle_bottom> hole_bottom && circle_top < hole_top)
+				{
+					document.getElementById('start').style.display='block';document.getElementById('play').style.display='block';
+					document.getElementById("infotext").innerHTML = "Woho, du klarade det!";
+				}
+					
 			}).play();
 
 
