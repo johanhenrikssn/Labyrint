@@ -17,7 +17,7 @@
 		<div id="start">
 				<div id="play">
 					<a href = "javascript:void(0)" onclick = "document.getElementById('start').style.display='none';document.getElementById('play').style.display='none'"><h1>LABYRINT</h1></a>
-					<p>Styr kulan med hjälp av din röst och försöka få den att trilla ner i hålet.</p>
+					<p>Styr kulan med hjälp av din röst och försök få den att trilla ner i hålet.</p>
 					
 				</div>
 		</div>
@@ -26,7 +26,7 @@
 		<div class="wrapper">
 			<div class="game">
 				<h1>Labyrint</h1>
-				<span id="pitch">--</span>
+				<span id="pitch"></span>
 			</div>
 
 		</div>
@@ -66,10 +66,6 @@
         });
 
 
-
-          
-
-
 			window.navigator = window.navigator || {};
 
      		navigator.getUserMedia = navigator.getUserMedia       ||
@@ -85,15 +81,6 @@
 			var bufferLength = analyser.frequencyBinCount; // half the FFT value
 			bufferLength = bufferLength/15;
 			var freqDomain = new Uint8Array(bufferLength); // create an array to store the data
-
-			//Räknar ut pitch och uppdaterar siffran i dokumentet
-			//TODO: Sammanfoga med existerande variabler
-			var rafID = null;
-			var buflen = 2048;
-			var buf = new Uint8Array( buflen );
-			var pitchElem = document.getElementById( "pitch" );
-
-			var intendedWidth = document.querySelector('.wrapper').clientWidth;
 
 			
 			//Tar in mikrofonljud, samt ritar om intagandet går bra.
@@ -123,7 +110,7 @@
 			var pitchElem = document.getElementById( "pitch" );
 
 
-			var intendedWidth = document.querySelector('.wrapper').clientWidth;
+			var intendedWidth = document.querySelector('.wrapper').clientWidth*0.8;
 
 			//..........All Graphics.......................
 			// Make an instance of two and place it on the page
