@@ -81,27 +81,7 @@
 			analyser.fftSize = 2048;
 			var bufferLength = analyser.frequencyBinCount; // half the FFT value
 			bufferLength = bufferLength/15;
-				var freqDomain = new Uint8Array(bufferLength); // create an array to store the data
-			
-			//Tar in mikrofonljud, samt ritar om intagandet går bra.
-			navigator.getUserMedia({audio: true}, function(stream) {
-				
-				var source = context.createMediaStreamSource(stream);
-				
-				source.connect(analyser);
-				
-				//Updatera nuvarande pitch
-				updatePitch();
-
-				draw();
-
-			}, errorCallback);
-
-			//Om det inte går att få mikrofonljudet
-			function errorCallback() {
-    			
-    			alert('something went wrong');
-			}
+			var freqDomain = new Uint8Array(bufferLength); // create an array to store the data
 
 			//Räknar ut pitch och uppdaterar siffran i dokumentet
 			//TODO: Sammanfoga med existerande variabler
@@ -118,6 +98,40 @@
 			WIDTH = canvas.width;
 			HEIGHT = canvas.height;
 			canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+			
+			//Tar in mikrofonljud, samt ritar om intagandet går bra.
+			navigator.getUserMedia({audio: true}, success, errorCallback);
+
+			function success(stream) {
+
+				var source = context.createMediaStreamSource(stream);
+				
+				source.connect(analyser);
+				
+				//Updatera nuvarande pitch
+				updatePitch();
+
+				draw();
+
+			}
+
+			//Om det inte går att få mikrofonljudet
+			function errorCallback() {
+    			
+    			alert('something went wrong');
+			}
+
+			function draw() {
+				analyser.getByteFrequencyData(freqDomain);
+
+				setUpVisualizer();
+
+				requestAnimationFrame(draw);
+
+
+			}
+
+			
 
 			//..........All Graphics.......................
 			// Make an instance of two and place it on the page
@@ -319,11 +333,6 @@
 
 				if(circle_left > hole_left && circle_right < hole_right && circle_bottom> hole_bottom && circle_top < hole_top);
 					//console.log("bärs");
-
-					console.log(yPosition);
-					console.log(canvas.height);
-
-
 			}).play();
 
 
@@ -331,24 +340,7 @@
 			two.update();
 			//..............................................
 
-			function draw() {
-
-				requestAnimationFrame(draw);
-
-				analyser.getByteFrequencyData(freqDomain);
-
-				setUpVisualizer();
-
-				//console.log (gameDirection);
-
-			}
-
-			function AllTheSame(array) {
-				var first = array[0];
-					return array.every(function(element) {
-    				return element === first;
-				});
-			}
+			
 
 		</script>
 	</body>

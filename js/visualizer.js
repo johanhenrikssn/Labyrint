@@ -16,5 +16,4 @@ function setUpVisualizer() {
 
 		x += barWidth + 1;
 	}
-
 }
