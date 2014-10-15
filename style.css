@@ -20,13 +20,13 @@ body{
 
 h1
 {
+
 	font-family: 'Londrina Solid', cursive;
 	font-size: 400%;
 	text-align: center;	
 	margin: 2% 0 0 0;
 	padding: 0;
 	color: white;
-
 
 }
 
@@ -56,7 +56,6 @@ a {
 	height: 80%;
 }
 
-
 canvas {
 	margin: 0;
 
@@ -71,7 +70,7 @@ canvas {
 	left: 0%;
 	width: 100%;
 	height: 100%;
-	background: url(maze_bc.png);
+	background: url(img/maze_bc.png);
 	z-index:1001;
 	
 }

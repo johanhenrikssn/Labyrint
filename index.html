@@ -4,13 +4,16 @@
 		<title> Labyrint</title>
 		<link rel="stylesheet" type="text/css" href="style.css">
 
+
 		<script src="js/visualizer.js" type="text/javascript"></script>
 		<script src="js/two.min.js"></script>
 		<script src="js/pitch.js"></script>
 		<link href='http://fonts.googleapis.com/css?family=Londrina+Solid' rel='stylesheet' type='text/css'>
+		<script src="js/jquery-2.1.1.min.js"></script>
 	</head>
-	
+
 	<body>
+		
 
 		<div id="start">
 				<div id="play">
@@ -34,7 +37,42 @@
 
 		<script>
 
-		
+
+		var gameDirection = 2;
+
+		$(function() {
+          
+
+          // Update the renderer in order to generate corresponding DOM Elements.
+          two.update();
+
+          $(btn_group._renderer.elem)
+            .css('cursor', 'pointer')
+            .click(function(e) {
+              changeGameDirection();
+            });
+
+          function changeGameDirection() {
+	          	if (gameDirection == 1){
+	            	gameDirection = 2;
+	            	btn_horizontal.fill = active;
+	            	btn_vertical.fill = non_active;
+	            }
+	            else if (gameDirection == 2){
+	            	gameDirection = 1;
+	            	btn_horizontal.fill = non_active;
+	            	btn_vertical.fill = active;
+	            }
+          
+			}
+
+        });
+
+
+
+          
+
+
 			window.navigator = window.navigator || {};
 
      		navigator.getUserMedia = navigator.getUserMedia       ||
@@ -50,26 +88,6 @@
 			var bufferLength = analyser.frequencyBinCount; // half the FFT value
 			bufferLength = bufferLength/15;
 			var freqDomain = new Uint8Array(bufferLength); // create an array to store the data
-			
-			//Tar in mikrofonljud, samt ritar om intagandet går bra.
-			navigator.getUserMedia({audio: true}, function(stream) {
-				
-				var source = context.createMediaStreamSource(stream);
-				
-				source.connect(analyser);
-				
-				//Updatera nuvarande pitch
-				updatePitch();
-
-				draw();
-
-			}, errorCallback);
-
-			//Om det inte går att få mikrofonljudet
-			function errorCallback() {
-    			
-    			alert('something went wrong');
-			}
 
 			//Räknar ut pitch och uppdaterar siffran i dokumentet
 			//TODO: Sammanfoga med existerande variabler
@@ -87,11 +105,45 @@
 			HEIGHT = canvas.height;
 			canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
+			
+			//Tar in mikrofonljud, samt ritar om intagandet går bra.
+			navigator.getUserMedia({audio: true}, success, errorCallback);
+
+			function success(stream) {
+
+				var source = context.createMediaStreamSource(stream);
+				
+				source.connect(analyser);
+				
+				//Updatera nuvarande pitch
+				updatePitch();
+
+				draw();
+
+			}
+
+			//Om det inte går att få mikrofonljudet
+			function errorCallback() {
+    			
+    			alert('something went wrong');
+			}
+
+			function draw() {
+				analyser.getByteFrequencyData(freqDomain);
+
+				setUpVisualizer();
+
+				requestAnimationFrame(draw);
+
+
+			}
+
+			
+
 			//..........All Graphics.......................
 			// Make an instance of two and place it on the page
 			var gamebox = document.querySelector('.game');
 			var gamebox_height = document.querySelector('.game').clientHeight;
-
 
 			var params = { width: intendedWidth, height: gamebox_height };
 			var two = new Two(params).appendTo(gamebox);
@@ -117,7 +169,41 @@
 			var yPosition = gamebox_height - gamebox_height*0.3;
 			circle.translation.set(xPosition,yPosition);
 
-				
+			//BUTTON
+
+			var active = 'green';
+			var non_active = 'gray';
+
+			var right = two.makePolygon(115, 100, 115, 150, 155, 125);
+			var left = two.makePolygon(5, 125, 45, 150, 45, 100);
+			var down = two.makePolygon(55, 165, 80, 205, 105, 165);
+			var up = two.makePolygon(55, 85, 80, 45, 105, 85);
+			var buttonCircle = two.makeCircle(80, 125, 100);
+		
+			var btn_horizontal = new Two.Group();
+			var btn_vertical = new Two.Group();
+			var btn_group = new Two.Group();
+
+			btn_horizontal.add(right);
+			btn_horizontal.add(left);
+			btn_vertical.add(down);
+			btn_vertical.add(up);
+
+			btn_vertical.fill = non_active;
+			btn_horizontal.fill = active;
+			buttonCircle.fill = active;
+			buttonCircle.opacity = 0.1;
+
+			btn_group.add(buttonCircle);
+			btn_group.add(btn_vertical);
+			btn_group.add(btn_horizontal);
+
+			btn_group.scale = 0.5;
+			btn_group.linewidth = 0;
+			btn_group.translation.set(20, 0);
+
+			two.add(btn_group);
+
 
 			var delta = new Two.Vector(0, 0);
 			
@@ -131,69 +217,130 @@
 			var circle_top = yPosition+circle_radius;
 			var circle_bottom = yPosition-circle_radius;
 
+			var lowStreak=1;
+			var highStreak=1;
+			var lastPitch;
 
 			var hole_left = hole_xPosition-hole_radius; 
 			var hole_right = hole_xPosition+hole_radius;
 			var hole_top = hole_yPosition+hole_radius;
 			var hole_bottom = hole_yPosition-hole_radius;
 
-
-			 // hole.click(function(e) {
-    //           rect.fill = 'blue';
-    //         });
-
-			
 			// animationloop
 			two.bind('update', function(frameCount) {
 
-				maxValue = Math.max.apply(Math, freqDomain);
-				
-				for(i = 0; i < freqDomain.length; i++)
-				{
-					if(freqDomain[i] == maxValue)
-					{
-						index[j] = i;
-						j++;
-						if(j == 8)
-							j = 0;
+				if(gameDirection == 2){
+					//Low tone if pitch is under 180
+					if(pitch < 220){
+						//Reset high tone in a row counter
+						highStreak=1;
 
-						break;
+						if (pitch < lastPitch && lowStreak < 1000){
+							lowStreak++;
+						}
 
+						//stops the ball from rollin' out of the window
+						if ((xPosition + lowStreak * -1) > 20){
+							delta.x = lowStreak * -1;
+							delta.y = 0;
+							xPosition = xPosition + lowStreak * -1;
+							circle_left--;
+							circle_right--;
+						}
+						else{
+							delta.x = 0;
+						}
+
+						lastPitch=pitch;
 					}
-				}
-				
-				//stops the ball from rollin' out of the window
-				if(xPosition < (intendedWidth-20) && xPosition > 20 && index[1] != 0&& AllTheSame(index)){
-					//decides the steering of the ball
-					if(index[1] < 12){
-						delta.x = -1;
-						xPosition--;
-						circle_left--;
-						circle_right--;
 
+					//High tone if pitch is over 180 and not valid if over 1500
+					else if(pitch >= 220 && pitch < 1500){
+						//Reset low tone in a row counter
+						lowStreak=1;
+
+						if (pitch > lastPitch && highStreak < 1000){
+							highStreak++;
+						}
+
+						//stops the ball from rollin' out of the window
+						if ((xPosition + highStreak) < (intendedWidth-20)){
+							delta.x = highStreak * 1; 
+							delta.y = 0;
+							xPosition = xPosition + highStreak * 1;
+							circle_top++;
+							circle_bottom++;
+						}
+						else{
+							delta.x = 0;
+						}
+
+						lastPitch=pitch;
 					}
-					else if(index[1] > 12){
-						delta.x = +1;
-						xPosition++;
-						circle_left++;
-						circle_right++;
+
+					else
+						delta.x = 0;
+
+					circle.translation.addSelf(delta);
+				}
+				else if(gameDirection == 1){
+					//Low tone if pitch is under 180
+					if(pitch >= 220 && pitch < 1500){
+						//Reset high tone in a row counter
+						highStreak=1;
+
+						if (pitch < lastPitch && lowStreak < 1000){
+							lowStreak++;
+						}
+
+						//stops the ball from rollin' out of the window
+						if ((yPosition + lowStreak * -1) > 20){
+							delta.y = lowStreak * -1;
+							delta.x = 0;
+							yPosition = yPosition + lowStreak * -1;
+							circle_top--;
+							circle_bottom--;
+						}
+						else{
+							delta.y = 0;
+						}
+
+						lastPitch=pitch;
 					}
+
+
+					//High tone if pitch is over 180 and not valid if over 1500
+					else if(pitch < 220){
+						//Reset low tone in a row counter
+						lowStreak=1;
+
+						if (pitch > lastPitch && highStreak < 1000){
+							highStreak++;
+						}
+
+						//stops the ball from rollin' out of the window
+						if ((yPosition + highStreak) < (gamebox_height-20)){
+							delta.y = highStreak * 1; 
+							delta.x = 0;
+							yPosition = yPosition + highStreak * 1;
+							circle_left++;
+							circle_right++;
+						}
+						else{
+							delta.y = 0;
+						}
+
+						lastPitch=pitch;
+					}
+
+					else
+						delta.y = 0;
+
+					circle.translation.addSelf(delta);
 				}
-				else
-					delta.x = 0;
 
-				
-				if(circle_left > hole_left && circle_right < hole_right && circle_bottom> hole_bottom && circle_top < hole_top){
-
-					console.log("bärs");
-
-				}
-					
-
-				circle.translation.addSelf(delta);
-
-
-
+				if(circle_left > hole_left && circle_right < hole_right && circle_bottom> hole_bottom && circle_top < hole_top);
+					//console.log("bärs");
 			}).play();
 
 
@@ -201,22 +348,7 @@
 			two.update();
 			//..............................................
 
-			function draw() {
-
-				requestAnimationFrame(draw);
-
-				analyser.getByteFrequencyData(freqDomain);
-
-				setUpVisualizer();
-
-			}
-
-			function AllTheSame(array) {
-				var first = array[0];
-					return array.every(function(element) {
-    				return element === first;
-				});
-			}
+			
 
 		</script>
 	</body>

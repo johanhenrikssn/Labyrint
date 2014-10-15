@@ -22,11 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-function noteFromPitch( frequency ) {
-	var noteNum = 12 * (Math.log( frequency / 440 )/Math.log(2) );
-	return Math.round( noteNum ) + 69;
-}
-
 function autoCorrelate( buf, sampleRate ) {
 	var MIN_SAMPLES = 4;	// corresponds to an 11kHz signal
 	var MAX_SAMPLES = 1000; // corresponds to a 44Hz signal
@@ -76,7 +71,6 @@ function autoCorrelate( buf, sampleRate ) {
 }
 
 function updatePitch( time ) {
-	var cycles = new Array;
 	analyser.getByteTimeDomainData( buf );
 
 	// possible other approach to confidence: sort the array, take the median; go through the array and compute the average deviation
