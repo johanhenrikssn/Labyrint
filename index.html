@@ -4,7 +4,6 @@
 		<title> Labyrint</title>
 		<link rel="stylesheet" type="text/css" href="style.css">
 
-		<script src="js/visualizer.js"></script>
 		<script src="js/two.min.js"></script>
 		<script src="js/pitch.js"></script>
 		<script src="js/jquery-2.1.1.min.js"></script>
@@ -14,19 +13,15 @@
 	<body>
 		<header>
 			<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
-			<!-- jag tyckte tyo det här typsnittet lirade bättre med bollarna? Att ha striken som ett genomgående tema på alla objekt.
-			<link href='http://fonts.googleapis.com/css?family=Londrina+Outline' rel='stylesheet' type='text/css'>-->
-
 
 
 			<div class="wrapper">
 				<div class="game">
 					<h1>Labyrint</h1>
-					<span id="pitch">--</span>Hz</div>
+					<span id="pitch">--</span>Hz
+				</div>
 
-				</div>	
-				<canvas class="visualizer"></canvas>
-			</div>
+			</div>	
 
 		</header>			
 
@@ -81,7 +76,26 @@
 			analyser.fftSize = 2048;
 			var bufferLength = analyser.frequencyBinCount; // half the FFT value
 			bufferLength = bufferLength/15;
-			var freqDomain = new Uint8Array(bufferLength); // create an array to store the data
+				var freqDomain = new Uint8Array(bufferLength); // create an array to store the data
+			
+			//Tar in mikrofonljud, samt ritar om intagandet går bra.
+			navigator.getUserMedia({audio: true}, function(stream) {
+				
+				var source = context.createMediaStreamSource(stream);
+				
+				source.connect(analyser);
+				
+				//Updatera nuvarande pitch
+				updatePitch();
+
+
+			}, errorCallback);
+
+			//Om det inte går att få mikrofonljudet
+			function errorCallback() {
+    			
+    			alert('something went wrong');
+			}
 
 			//Räknar ut pitch och uppdaterar siffran i dokumentet
 			//TODO: Sammanfoga med existerande variabler
@@ -90,48 +104,8 @@
 			var buf = new Uint8Array( buflen );
 			var pitchElem = document.getElementById( "pitch" );
 
-			//Initerar canvas-egenskaper
-			var canvas = document.querySelector('.visualizer');
-			var canvasCtx = canvas.getContext("2d");
+
 			var intendedWidth = document.querySelector('.wrapper').clientWidth;
-			canvas.setAttribute('width',intendedWidth);
-			WIDTH = canvas.width;
-			HEIGHT = canvas.height;
-			canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-			
-			//Tar in mikrofonljud, samt ritar om intagandet går bra.
-			navigator.getUserMedia({audio: true}, success, errorCallback);
-
-			function success(stream) {
-
-				var source = context.createMediaStreamSource(stream);
-				
-				source.connect(analyser);
-				
-				//Updatera nuvarande pitch
-				updatePitch();
-
-				draw();
-
-			}
-
-			//Om det inte går att få mikrofonljudet
-			function errorCallback() {
-    			
-    			alert('something went wrong');
-			}
-
-			function draw() {
-				analyser.getByteFrequencyData(freqDomain);
-
-				setUpVisualizer();
-
-				requestAnimationFrame(draw);
-
-
-			}
-
-			
 
 			//..........All Graphics.......................
 			// Make an instance of two and place it on the page
@@ -333,6 +307,7 @@
 
 				if(circle_left > hole_left && circle_right < hole_right && circle_bottom> hole_bottom && circle_top < hole_top);
 					//console.log("bärs");
+
 			}).play();
 
 
@@ -340,7 +315,7 @@
 			two.update();
 			//..............................................
 
-			
+
 
 		</script>
 	</body>
