@@ -4,30 +4,37 @@
 		<title> Labyrint</title>
 		<link rel="stylesheet" type="text/css" href="style.css">
 
-		<script src="visualizer.js" type="text/javascript"></script>
+		<script src="js/visualizer.js" type="text/javascript"></script>
 		<script src="js/two.min.js"></script>
 		<script src="js/pitch.js"></script>
+		<link href='http://fonts.googleapis.com/css?family=Londrina+Solid' rel='stylesheet' type='text/css'>
 	</head>
 	
 	<body>
-		<header>
-			<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
 
-
-			<div class="wrapper">
-				<div class="game">
-					<h1>Labyrint</h1>
-					<span id="pitch">--</span>Hz</div>
-
-				</div>	
-				<canvas class="visualizer"></canvas>
+		<div id="start">
+				<div id="play">
+					<a href = "javascript:void(0)" onclick = "document.getElementById('start').style.display='none';document.getElementById('play').style.display='none'"><h1>LABYRINT</h1></a>
+					<p>Styr kulan med hjälp av din röst och försöka få den att trilla ner i hålet.</p>
+					
+				</div>
+		</div>
+		
+		
+		<div class="wrapper">
+			<div class="game">
+				<!-- <h1>Labyrint</h1> -->
+				<span id="pitch">--</span>
 			</div>
+			
+			<canvas class="visualizer"></canvas>
 
-		</header>			
+		</div>
 
 
 		<script>
 
+		
 			window.navigator = window.navigator || {};
 
      		navigator.getUserMedia = navigator.getUserMedia       ||
@@ -42,7 +49,7 @@
 			analyser.fftSize = 2048;
 			var bufferLength = analyser.frequencyBinCount; // half the FFT value
 			bufferLength = bufferLength/15;
-				var freqDomain = new Uint8Array(bufferLength); // create an array to store the data
+			var freqDomain = new Uint8Array(bufferLength); // create an array to store the data
 			
 			//Tar in mikrofonljud, samt ritar om intagandet går bra.
 			navigator.getUserMedia({audio: true}, function(stream) {
@@ -130,6 +137,11 @@
 			var hole_top = hole_yPosition+hole_radius;
 			var hole_bottom = hole_yPosition-hole_radius;
 
+
+			 // hole.click(function(e) {
+    //           rect.fill = 'blue';
+    //         });
+
 			
 			// animationloop
 			two.bind('update', function(frameCount) {
@@ -171,8 +183,12 @@
 					delta.x = 0;
 
 				
-				if(circle_left > hole_left && circle_right < hole_right && circle_bottom> hole_bottom && circle_top < hole_top);
+				if(circle_left > hole_left && circle_right < hole_right && circle_bottom> hole_bottom && circle_top < hole_top){
+
 					console.log("bärs");
+
+				}
+					
 
 				circle.translation.addSelf(delta);
 
