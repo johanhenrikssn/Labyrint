@@ -6,8 +6,7 @@ body{
 	text-shadow: rgba(0,0,0,.01) 0 0 1px;
 }
 
-.wrapper
-{
+.wrapper{
 	width: 100%;
 	height: 100%;
 	background: url(img/stardust.png);
@@ -20,20 +19,16 @@ body{
 	border-width: 2px; */
 }
 
-h1
-{
-
+h1{
 	font-family: 'Londrina Solid', cursive;
 	font-size: 400%;
 	text-align: center;	
 	margin: 2% 0 0 0;
 	padding: 0;
 	color: white;
-
 }
 
-p
-{
+p{
 	font-family: 'Londrina Solid', cursive;
 	padding: 3%;
 	font-size: 180%;
@@ -42,7 +37,7 @@ p
 	color: white;
 }
 
-a {
+a{
 	color: black;
 	text-decoration: none;
 }
@@ -57,7 +52,6 @@ svg{
 
 }
 
-
 .game{
 	height: 70%;
 }
@@ -70,7 +64,6 @@ svg{
 
 }
 
-
 #start{
 	margin: 0;
 	padding: 0;
@@ -81,7 +74,6 @@ svg{
 	height: 100%;
 	background: url(img/stardust.png);
 	z-index:1001;
-	
 }
 
 #play{
@@ -96,4 +88,11 @@ svg{
 	z-index:1002;
 	border: 2px solid #81D1B7;
     border-radius: 5px;
+}
+
+#logo{
+	display:block;
+    margin:auto;
+	content:url(img/button.png);
+	z-index:1001;
 }
