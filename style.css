@@ -42,8 +42,22 @@ a{
 	text-decoration: none;
 }
 
+svg{
+	background-color: white;
+	width: 80%;
+	display: block;
+	margin: auto;
+
+}
+
 .game{
 	height: 60%;
+}
+
+
+.game h1{
+	margin: 0;
+	padding: 3% 0 1% 0;
 }
 
 #start{

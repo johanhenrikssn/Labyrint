@@ -26,7 +26,7 @@
 		<div class="wrapper">
 			<div class="game">
 				<h1>Labyrint</h1>
-				<span id="pitch">--</span>
+				<span id="pitch"></span>
 			</div>
 
 		</div>
@@ -66,10 +66,6 @@
         });
 
 
-
-          
-
-
 			window.navigator = window.navigator || {};
 
      		navigator.getUserMedia = navigator.getUserMedia       ||
@@ -85,15 +81,6 @@
 			var bufferLength = analyser.frequencyBinCount; // half the FFT value
 			bufferLength = bufferLength/15;
 			var freqDomain = new Uint8Array(bufferLength); // create an array to store the data
-
-			//Räknar ut pitch och uppdaterar siffran i dokumentet
-			//TODO: Sammanfoga med existerande variabler
-			var rafID = null;
-			var buflen = 2048;
-			var buf = new Uint8Array( buflen );
-			var pitchElem = document.getElementById( "pitch" );
-
-			var intendedWidth = document.querySelector('.wrapper').clientWidth;
 
 			
 			//Tar in mikrofonljud, samt ritar om intagandet går bra.
@@ -123,7 +110,7 @@
 			var pitchElem = document.getElementById( "pitch" );
 
 
-			var intendedWidth = document.querySelector('.wrapper').clientWidth;
+			var intendedWidth = document.querySelector('.wrapper').clientWidth*0.8;
 
 			//..........All Graphics.......................
 			// Make an instance of two and place it on the page
@@ -229,8 +216,8 @@
 							delta.x = lowStreak * -1;
 							delta.y = 0;
 							xPosition = xPosition + lowStreak * -1;
-							circle_left--;
-							circle_right--;
+							circle_left = circle_left + lowStreak*-1;
+							circle_right = circle_right + lowStreak*-1;
 						}
 						else{
 							delta.x = 0;
@@ -253,8 +240,8 @@
 							delta.x = highStreak * 1; 
 							delta.y = 0;
 							xPosition = xPosition + highStreak * 1;
-							circle_top++;
-							circle_bottom++;
+							circle_left = circle_left + highStreak;
+							circle_right = circle_right + highStreak;
 						}
 						else{
 							delta.x = 0;
@@ -283,8 +270,8 @@
 							delta.y = lowStreak * -1;
 							delta.x = 0;
 							yPosition = yPosition + lowStreak * -1;
-							circle_top--;
-							circle_bottom--;
+							circle_top = circle_top + lowStreak*-1;
+							circle_bottom = circle_bottom + lowStreak*-1;
 						}
 						else{
 							delta.y = 0;
@@ -308,8 +295,8 @@
 							delta.y = highStreak * 1; 
 							delta.x = 0;
 							yPosition = yPosition + highStreak * 1;
-							circle_left++;
-							circle_right++;
+							circle_top = circle_top + highStreak;
+							circle_bottom = circle_bottom + highStreak;
 						}
 						else{
 							delta.y = 0;
@@ -323,10 +310,14 @@
 
 					circle.translation.addSelf(delta);
 				}
+			
 
-				if(circle_left > hole_left && circle_right < hole_right && circle_bottom> hole_bottom && circle_top < hole_top);
-					//console.log("bärs");
-
+				if(circle_left > hole_left && circle_right < hole_right && circle_bottom> hole_bottom && circle_top < hole_top)
+				{
+					document.getElementById('start').style.display='block';document.getElementById('play').style.display='block';
+					document.getElementById("infotext").innerHTML = "Woho, du klarade det!";
+				}
+					
 			}).play();
 
 
