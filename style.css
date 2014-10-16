@@ -47,17 +47,22 @@ svg{
 	width: 80%;
 	display: block;
 	margin: auto;
+	border: 3px solid #81D1B7;
+	border-radius: 5px;
 
 }
 
 .game{
-	height: 60%;
+	height: 70%;
 }
 
 
-.game h1{
+.wrapper h1{
 	margin: 0;
 	padding: 3% 0 1% 0;
+	font-family: 'Londrina Outline';
+	color: #81D1B7;
+
 }
 
 #start{

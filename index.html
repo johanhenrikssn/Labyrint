@@ -7,6 +7,7 @@
 		<script src="js/two.min.js"></script>
 		<script src="js/pitch.js"></script>
 		<link href='http://fonts.googleapis.com/css?family=Londrina+Solid' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Londrina+Outline' rel='stylesheet' type='text/css'>
 		<script src="js/jquery-2.1.1.min.js"></script>
 	</head>
 
@@ -16,16 +17,17 @@
 		
 		<div id="start">
 				<div id="play">
-					<h1>LABYRINT</h1>
-					<p>Styr kulan med hjälp av din röst och försöka få den att trilla ner i hålet.</p>
-					<a href = "javascript:void(0)" onclick = "document.getElementById('start').style.display='none';document.getElementById('play').style.display='none'"><div id="logo"></div></a>
+					<a href = "javascript:void(0)" onclick = "document.getElementById('start').style.display='none';document.getElementById('play').style.display='none'"><h1>LABYRINT</h1></a>
+					<p>Styr kulan med hjälp av din röst och försök få den att trilla ner i hålet.</p>
+
+					
 				</div>
 		</div>
 		
 		
 		<div class="wrapper">
+			<h1>Labyrint</h1>
 			<div class="game">
-				<h1>Labyrint</h1>
 				<span id="pitch"></span>
 			</div>
 
@@ -123,8 +125,8 @@
 			//HÅLET
 			var hole_radius = 40;
 			var hole = two.makeCircle(72, 100, hole_radius);
-			hole.fill = 'grey';
-			hole.stroke = 'black';
+			hole.fill = '#4e4f4e';
+			hole.stroke = '#2b2b2b';
 			hole.linewidth = 1;
 			var hole_xPosition = intendedWidth - intendedWidth*Math.random();
 			var hole_yPosition = gamebox_height*0.15;
@@ -134,17 +136,17 @@
 			//BOLLEN
 			var circle_radius = 20;
 			var circle = two.makeCircle(72, 100, circle_radius);
-			circle.fill = 'yellow';
-			circle.stroke = 'red';
+			circle.fill = '#f7e667';
+			circle.stroke = '#dbcc5c';
 			circle.linewidth = 1;
 			var xPosition = intendedWidth/2;
-			var yPosition = gamebox_height - gamebox_height*0.3;
+			var yPosition = gamebox_height - gamebox_height*0.15;
 			circle.translation.set(xPosition,yPosition);
 
 			//BUTTON
 
-			var active = 'green';
-			var non_active = 'gray';
+			var active = '#508271';
+			var non_active = '#b1ddce';
 
 			var right = two.makePolygon(115, 100, 115, 150, 155, 125);
 			var left = two.makePolygon(5, 125, 45, 150, 45, 100);
