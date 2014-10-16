@@ -16,9 +16,11 @@
 		
 		<div id="start">
 				<div id="play">
-					<a id ="button" href = "javascript:void(0)" onclick = "hide()"><h1>LABYRINT</h1></a>
+
+					<h1>LABYRINT</h1>
 					<p id="infotext">Styr kulan med hjälp av din röst och försöka få den att trilla ner i hålet.</p>
-					
+					<a id="button" href = "javascript:void(0)" onclick = "hide()"><div id="logo"></div></a>
+
 				</div>
 		</div>
 		
@@ -26,7 +28,7 @@
 		<div class="wrapper">
 			<div class="game">
 				<h1>Labyrint</h1>
-				<span id="pitch">--</span>
+				<span id="pitch"></span>
 			</div>
 
 		</div>
@@ -66,10 +68,6 @@
         });
 
 
-
-          
-
-
 			window.navigator = window.navigator || {};
 
      		navigator.getUserMedia = navigator.getUserMedia       ||
@@ -85,15 +83,6 @@
 			var bufferLength = analyser.frequencyBinCount; // half the FFT value
 			bufferLength = bufferLength/15;
 			var freqDomain = new Uint8Array(bufferLength); // create an array to store the data
-
-			//Räknar ut pitch och uppdaterar siffran i dokumentet
-			//TODO: Sammanfoga med existerande variabler
-			var rafID = null;
-			var buflen = 2048;
-			var buf = new Uint8Array( buflen );
-			var pitchElem = document.getElementById( "pitch" );
-
-			var intendedWidth = document.querySelector('.wrapper').clientWidth;
 
 			
 			//Tar in mikrofonljud, samt ritar om intagandet går bra.
@@ -123,7 +112,7 @@
 			var pitchElem = document.getElementById( "pitch" );
 
 
-			var intendedWidth = document.querySelector('.wrapper').clientWidth;
+			var intendedWidth = document.querySelector('.wrapper').clientWidth*0.8;
 
 			//..........All Graphics.......................
 			// Make an instance of two and place it on the page
@@ -216,7 +205,7 @@
 
 				if(gameDirection == 2){
 					//Low tone if pitch is under 180
-					if(pitch < 150){
+					if(pitch < 220){
 						//Reset high tone in a row counter
 						highStreak=1;
 
@@ -240,7 +229,7 @@
 					}
 
 					//High tone if pitch is over 180 and not valid if over 1500
-					else if(pitch >= 150 && pitch < 1500){
+					else if(pitch >= 220 && pitch < 1500){
 						//Reset low tone in a row counter
 						lowStreak=1;
 
@@ -270,7 +259,7 @@
 				}
 				else if(gameDirection == 1){
 					//Low tone if pitch is under 180
-					if(pitch >= 150 && pitch < 1500){
+					if(pitch >= 220 && pitch < 1500){
 						//Reset high tone in a row counter
 						highStreak=1;
 
@@ -295,7 +284,7 @@
 
 
 					//High tone if pitch is over 180 and not valid if over 1500
-					else if(pitch < 150){
+					else if(pitch < 220){
 						//Reset low tone in a row counter
 						lowStreak=1;
 

@@ -76,13 +76,9 @@ function updatePitch( time ) {
 	// possible other approach to confidence: sort the array, take the median; go through the array and compute the average deviation
 	var ac = autoCorrelate( buf, context.sampleRate );
 
- 	if (ac == -1) {
-	 	pitchElem.innerText = "--";
+ 	if (ac != -1) 
+		pitch = ac;
 
- 	} else {
-	 	pitch = ac;
-	 	pitchElem.innerText = Math.floor( pitch ) ;
-	}
 
 	if (!window.requestAnimationFrame)
 		window.requestAnimationFrame = window.webkitRequestAnimationFrame;
