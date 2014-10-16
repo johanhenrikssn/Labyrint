@@ -20,7 +20,7 @@ body{
 }
 
 h1{
-	font-family: 'Londrina Solid', cursive;
+	font-family: 'Londrina Solid';
 	font-size: 400%;
 	text-align: center;	
 	margin: 2% 0 0 0;
@@ -60,7 +60,6 @@ svg{
 .wrapper h1{
 	margin: 0;
 	padding: 3% 0 1% 0;
-	font-family: 'Londrina Outline';
 	color: #81D1B7;
 
 }
